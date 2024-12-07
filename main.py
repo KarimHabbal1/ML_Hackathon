@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np 
 from scipy.stats import chi2_contingency
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
 
 
 df = pd.read_excel('Dataset.xls')
@@ -59,3 +63,55 @@ for col in columns_to_encode:
 print(all_encodings)  # To see the updated dataframe
 
 print(df.head())
+
+
+
+# Standardize the dataset
+scaler = StandardScaler()
+data_scaled = scaler.fit_transform(df)  # Assuming df is the dataset with 40 features
+
+
+
+# Apply PCA to reduce to 2 components for visualization
+pca = PCA(n_components=2)  # For 2D visualization
+data_pca = pca.fit_transform(data_scaled)
+
+# Optional: Check how much variance is explained by the components
+explained_variance = pca.explained_variance_ratio_
+print(f"Explained Variance by Components: {explained_variance}")
+
+
+
+
+# Apply K-Means clustering
+kmeans = KMeans(n_clusters=3, random_state=42)  # Choose the number of clusters (e.g., 3)
+clusters1 = kmeans.fit_predict(data_pca)  # Cluster labels for each data point
+# Apply K-Means clustering
+kmeans = KMeans(n_clusters=4, random_state=42)  # Choose the number of clusters (e.g., 3)
+clusters2 = kmeans.fit_predict(data_pca)  # Cluster labels for each data point
+# Apply K-Means clustering
+kmeans = KMeans(n_clusters=5, random_state=42)  # Choose the number of clusters (e.g., 3)
+clusters3 = kmeans.fit_predict(data_pca)  # Cluster labels for each data point
+
+
+# Scatter plot of the PCA-reduced data
+plt.scatter(data_pca[:, 0], data_pca[:, 1], c=clusters1, cmap='viridis', s=50, alpha=0.7)
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.title('K-Means Clusters (PCA-Reduced Data)')
+plt.colorbar(label='Cluster Label')
+plt.show()
+# Scatter plot of the PCA-reduced data
+plt.scatter(data_pca[:, 0], data_pca[:, 1], c=clusters2, cmap='viridis', s=50, alpha=0.7)
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.title('K-Means Clusters (PCA-Reduced Data)')
+plt.colorbar(label='Cluster Label')
+plt.show()
+# Scatter plot of the PCA-reduced data
+plt.scatter(data_pca[:, 0], data_pca[:, 1], c=clusters3, cmap='viridis', s=50, alpha=0.7)
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.title('K-Means Clusters (PCA-Reduced Data)')
+plt.colorbar(label='Cluster Label')
+plt.show()
