@@ -58,3 +58,38 @@ df = df.drop(columns=list(columns_to_drop))
 print("Remaining columns:", df.columns)
 
 print(df.head())
+
+def unique_encode_column(df, column_name):
+    """
+    Encodes a column in the dataframe with unique numeric values for each unique category.
+
+    Parameters:
+    df (pd.DataFrame): The input dataframe.
+    column_name (str): The column to be encoded.
+
+    Returns:
+    pd.DataFrame: The dataframe with the encoded column.
+    dict: The mapping of original values to encoded values.
+    """
+    # Create a unique mapping for the column
+    unique_values = df[column_name].unique()
+    encoding_map = {value: idx for idx, value in enumerate(unique_values)}
+
+    # Replace the column values with their encoded values
+    df[column_name] = df[column_name].map(encoding_map)
+
+    return df, encoding_map
+
+columns_to_encode= list(df.columns)
+
+all_encodings={}
+
+for col in columns_to_encode:
+    df, encoding_map = unique_encode_column(df, col)
+    all_encodings[col] = encoding_map
+
+# Example usage:
+
+print(all_encodings)  # To see the updated dataframe
+
+print(df.head())
