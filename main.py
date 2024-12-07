@@ -121,8 +121,6 @@ plt.show()
 
 
 
-
-
 #SUPERVISED
 
 #Split the data into training and testing sets
